@@ -1,0 +1,48 @@
+Tema 1 APD - Calciu Alexandru
+
+Timp de realizare: 2-3 ore
+
+Primul pas la tema a fost sa inteleg scheletul si sa vad cat dureaza fiecare
+parte din algoritm ca sa determin care sectiune este critica din punctul de
+vedere al performantei. Pentru asta mi-am facut macro-ul TIME_IT, in care
+am folosit timespec_get pentru a masura timpul.
+
+Pe exemplele mari, adica 6 si 7, am vazut ca operatia de rescale dureaza cel
+mai mult si am incercat sa o paralelizez doar pe ea. Am paralelizat outer
+loop-ul intre thread-uri si am vazut ca am primit punctaj maxim, ceea ce
+a fost o surpriza placuta.
+
+Pentru a nu repeta cod am facut doua functii, get_start_bound si get_end_bound
+cu formulele copiate din laborator pentru impartirea buclelor pe thread-uri.
+apoi am repetat acelasi procedeu pentru functiile march si sample_grid.
+
+Ca structura pentru transmis ca argument la thread-uri am folosit una numita
+args care contine referinte pentru resursele comune ale thread-urilor: imaginea
+originala, cea rescalata, grid-ul si cele 16 contururi. Pe langa acestea,
+contine si o referinta pentru o bariera pe care am folosit-o la sincronizare si
+id-ul thread-ului si numarul total de thread-uri.
+
+Analizand algoritmul am decis ca pentru a obtine rezultate bune trebuie sa pun
+o bariera dupa fiecare etapa a algoritmului, deoarece datele de la un pas
+se bazeaza pe cele de dinainte. Astfel, in functia thread_function se observa
+doua apeluri la pthread_barrier_wait.
+
+Pentru paralelizarea la fill_grid am impartit atat for-ul mare cat si cele 2
+mai mici de dupa.
+
+Initial am realizat tema in C doar ca dupa am decis sa o modific in C++ doar
+ca sa vad cum e si am observat o mica imbunatatire in performanta. M-am gandit
+si sa folosesc smart pointers dar ar fi fost prea mult de modificat si mi-am zis
+ca nu ar avea sens si ar putea aduce si un deficit de performanta.
+
+Nota:
+#ifndef __USE_XOPEN2K
+#define __USE_XOPEN2K
+#endif
+
+#ifndef __USE_MISC
+#define __USE_MISC
+#endif
+
+portiunea aceasta de cod este pentru ca VSCode sa vada pthread_barrier_t si
+functiile asociate, fara ele tot compila doar ca nu vedea simbolurile astea.
