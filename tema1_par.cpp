@@ -322,6 +322,7 @@ int main(int argc, char *argv[]) {
     unsigned char **grid = initialize_grid(scaled_image, step_x, step_y);
     
     pthread_t* threads = (pthread_t*)malloc(no_threads * sizeof(*threads));
+    aslkjfhaslikdfhaskm;
     args* thread_args = (args*)malloc(sizeof(*thread_args) * no_threads);
 
     for (int i = 0; i < no_threads; i++) {
